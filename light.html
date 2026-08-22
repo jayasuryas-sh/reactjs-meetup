@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Dev, Many Agents</title>
+<!--
+  ============================================================
+  HOW TO USE THIS TEMPLATE
+  ============================================================
+  - Each slide is one <section class="slide"> inside <main>.
+    Add, remove, or reorder sections; numbering, progress bar,
+    and hash links adjust themselves.
+  - Present: open in any browser, press F for fullscreen.
+  - Navigate: arrow keys, Space, PageUp/PageDown, Home/End.
+    Click right half = next, left half = back.
+  - Speaker notes: <aside class="notes"> inside a slide.
+    Press N to show/hide notes for the current slide.
+  - Jump to a slide: add #7 to the URL.
+  - Theming: CSS variables in :root. --accent carries the deck.
+  - Slide types:
+      .slide            pointer slide (heading + points)
+      .slide.center     centered, for statements and titles
+      .slide.demo       the "switch to live demo" marker
+      .slide.backup     extra slides after thanks, for Q&A
+  ============================================================
+-->
+<style>
+  :root {
+    --bg: #f6f7f5;
+    --surface: #ffffff;
+    --ink: #16211f;
+    --muted: #5c6c68;
+    --accent: #0d7a63;
+    --warn: #9a6210;
+    --rule: #dde4e1;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); overflow: hidden; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: none; flex-direction: column;
+    justify-content: flex-start;
+    padding: 7vh 8vw; gap: 3.2vh;
+  }
+  .slide.active { display: flex; }
+  .slide.center { justify-content: center; }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: clamp(12px, 1.4vw, 16px);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+  h1 {
+    font-size: clamp(34px, 6.2vw, 84px);
+    line-height: 1.05; letter-spacing: -0.02em;
+    font-weight: 750; text-wrap: balance;
+  }
+  h2 {
+    font-size: clamp(26px, 4.4vw, 56px);
+    line-height: 1.1; letter-spacing: -0.015em;
+    font-weight: 700; text-wrap: balance;
+  }
+  .sub {
+    font-size: clamp(16px, 2vw, 26px);
+    color: var(--muted); max-width: 32em; line-height: 1.45;
+  }
+
+  ul.points { list-style: none; display: flex; flex-direction: column; gap: 2.4vh; }
+  ul.points li {
+    font-size: clamp(17px, 2.3vw, 30px);
+    line-height: 1.4; padding-left: 1.15em;
+    position: relative; max-width: 30em;
+  }
+  ul.points li::before {
+    content: "";
+    position: absolute; left: 0; top: 0.55em;
+    width: 0.45em; height: 0.45em; border-radius: 2px;
+    background: var(--accent);
+  }
+  ul.points li strong { color: var(--accent); font-weight: 650; }
+  ul.points li .dim { color: var(--muted); }
+  ul.points li.hl { border-left: 3px solid var(--accent); padding-left: 0.9em; margin-left: -1.2vw; }
+  ul.points li.hl::before { display: none; }
+
+  code {
+    font-family: var(--mono); font-size: 0.85em;
+    background: var(--surface); border: 1px solid var(--rule);
+    border-radius: 6px; padding: 0.08em 0.35em;
+  }
+
+  .statement {
+    font-size: clamp(28px, 4.8vw, 62px);
+    line-height: 1.15; font-weight: 700;
+    letter-spacing: -0.015em; max-width: 18em; text-wrap: balance;
+  }
+  .statement em { font-style: normal; color: var(--accent); }
+
+  .slide.demo { justify-content: center; align-items: flex-start; }
+  .demo-badge {
+    font-family: var(--mono);
+    font-size: clamp(12px, 1.4vw, 16px);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--bg); background: var(--warn);
+    border-radius: 999px; padding: 0.5em 1.2em; font-weight: 700;
+  }
+
+  /* thanks slide QR row */
+  .qr-row { display: flex; gap: 4vw; margin-top: 2vh; flex-wrap: wrap; }
+  .qr {
+    display: flex; flex-direction: column; align-items: center; gap: 1.4vh;
+  }
+  .qr .box {
+    width: clamp(120px, 16vw, 220px); height: clamp(120px, 16vw, 220px);
+    background: var(--surface); border: 2px dashed var(--rule);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-family: var(--mono); font-size: 13px;
+    text-align: center; padding: 12px;
+  }
+  .qr .box img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+  .qr .cap { font-size: clamp(13px, 1.5vw, 18px); color: var(--muted); }
+
+  /* backup tables */
+  .tbl { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.6vw, 20px); }
+  .tbl th {
+    font-family: var(--mono); font-size: 0.72em;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--muted); text-align: left;
+    padding: 1.2vh 1.2vw; border-bottom: 2px solid var(--rule);
+  }
+  .tbl td { padding: 1.4vh 1.2vw; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.4; }
+  .tbl td:first-child { color: var(--muted); white-space: nowrap; }
+  .tbl .yes { color: var(--accent); }
+  .tbl .no { color: var(--muted); }
+  .backup-tag {
+    font-family: var(--mono);
+    font-size: clamp(11px, 1.2vw, 14px);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--warn);
+  }
+
+  /* chrome */
+  #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); transition: width 0.25s ease; z-index: 10; }
+  #counter { position: fixed; bottom: 16px; right: 20px; font-family: var(--mono); font-size: 13px; color: var(--muted); z-index: 10; }
+  #brand { position: fixed; bottom: 16px; left: 20px; font-family: var(--mono); font-size: 13px; color: var(--muted); z-index: 10; }
+
+  aside.notes { display: none; }
+  #notes-overlay {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.97);
+    border-top: 2px solid var(--accent);
+    padding: 18px 32px 26px;
+    font-size: 16px; line-height: 1.55; color: var(--ink);
+    display: none; z-index: 20; max-height: 40vh; overflow-y: auto;
+  }
+  #notes-overlay .tag {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="brand">One Dev, Many Agents</div>
+<div id="counter"></div>
+<div id="notes-overlay"><span class="tag">Speaker notes (N to hide)</span><div id="notes-body"></div></div>
+
+<main>
+
+  <!-- 1 · TITLE -->
+  <section class="slide center">
+    <div class="kicker">React.js Bangalore Meetup</div>
+    <h1>One Dev,<br>Many Agents</h1>
+    <p class="sub">A practical workflow for parallel AI coding</p>
+  </section>
+
+  <!-- 2 · ABOUT ME -->
+  <section class="slide">
+    <div class="kicker">About me</div>
+    <h2>Hi, I'm Jayasurya</h2>
+    <ul class="points">
+      <li>Senior Frontend Engineer at <strong>SupplyHouse.com</strong></li>
+      <li>I lead the FE side of the <strong>Checkout pod</strong></li>
+      <li class="dim" style="color:var(--muted)">linkedin.com/in/jayasurya-s · instagram.com/techwithjayasurya</li>
+    </ul>
+  </section>
+
+  <!-- 3 · PROBLEM, STATEMENT -->
+  <section class="slide center">
+    <p class="statement">The problem <em>I</em> had.</p>
+  </section>
+
+  <!-- 4 · PROBLEM, POINTS -->
+  <section class="slide">
+    <div class="kicker">The problem I had</div>
+    <h2>Many agents, one terminal, zero visibility</h2>
+    <ul class="points">
+      <li>Multiple tasks in flight means <strong>multiple agents</strong> running at once</li>
+      <li>Hard to tell what's <strong>working</strong>, what's <strong>idle</strong>, what's <strong>blocked</strong></li>
+      <li>Every check-in means hopping across panes and tabs</li>
+      <li>Accidentally close the terminal? <strong>Your agent dies with it</strong></li>
+      <li class="dim" style="color:var(--muted)">Named your session and remembered the name? Lucky you. Not me.</li>
+    </ul>
+  </section>
+
+  <!-- 5 · WHAT I DID -->
+  <section class="slide">
+    <div class="kicker">What I did</div>
+    <h2>Went looking for a better way</h2>
+    <ul class="points">
+      <li>Found <strong>Conductor</strong>: a Mac GUI that runs parallel agents in isolated workspaces</li>
+      <li>Nice, but felt <strong>heavy</strong> for me with multiple workspaces open</li>
+      <li>And my home is the <strong>terminal</strong>, I didn't want to leave it</li>
+      <li>Then I found <strong>herdr</strong></li>
+    </ul>
+  </section>
+
+  <!-- 6 · HERDR -->
+  <section class="slide">
+    <div class="kicker">The fix</div>
+    <h2>herdr: an agent multiplexer</h2>
+    <ul class="points">
+      <li>Many agents, many workspaces, <strong>one window</strong></li>
+      <li>A TUI you can <strong>click and drag</strong>, no keyboard wizardry required</li>
+      <li>Always know which agent is <strong>working, idle, or blocked</strong></li>
+      <li>Ships <strong>skills</strong>: plain English instead of commands <span class="dim">("split a pane, show the logs")</span></li>
+      <li class="hl">Close it anytime. Type <code>herdr</code>. <strong>Everything is back.</strong></li>
+    </ul>
+  </section>
+
+  <!-- 7 · WHAT IF, STATEMENT -->
+  <section class="slide center">
+    <p class="statement">What if we gave our agents more power to <em>verify what we build?</em></p>
+  </section>
+
+  <!-- 8 · AGENT-BROWSER -->
+  <section class="slide">
+    <div class="kicker">The answer</div>
+    <h2>agent-browser</h2>
+    <ul class="points">
+      <li>A <strong>browser automation CLI for AI agents</strong>, from Vercel</li>
+      <li>Not test cases: agents verify your <strong>UI and user flows</strong> in a real browser</li>
+      <li>Snapshots, auth vault, a11y audits, <strong>React DevTools</strong> integration, and more</li>
+      <li>Built <strong>token-efficient</strong></li>
+      <li>Ships skills too: <span class="dim">"run an accessibility audit" is a sentence, not a command</span></li>
+    </ul>
+  </section>
+
+  <!-- 9 · COMBINE -->
+  <section class="slide">
+    <div class="kicker">Better together</div>
+    <h2>Now combine the two</h2>
+    <ul class="points">
+      <li>Every worktree gets its own agent <strong>and its own browser</strong></li>
+      <li>Multiple features tested <strong>simultaneously</strong>, each in an isolated instance</li>
+      <li>Bugs surface <strong>before I ever open the browser myself</strong></li>
+      <li>Fast, ergonomic, token-light, <strong>React-aware</strong></li>
+    </ul>
+  </section>
+
+  <!-- 10 · DEMO -->
+  <section class="slide demo">
+    <div class="demo-badge">Live demo</div>
+    <h2 style="margin-top:2vh">Enough talking. Let's see it in action.</h2>
+    <p class="sub">I know I've been bragging. Time to prove it.</p>
+  </section>
+
+  <!-- 11 · THANKS -->
+  <section class="slide center">
+    <div class="kicker">Thanks</div>
+    <h1 style="font-size:clamp(30px,5vw,64px)">Go run a team of agents.</h1>
+    <div class="qr-row">
+      <div class="qr">
+        <div class="box" style="border-style:solid"><img src="qr-linkedin.png" alt="LinkedIn QR code"></div>
+        <div class="cap">Connect: LinkedIn</div>
+      </div>
+      <div class="qr">
+        <div class="box" style="border-style:solid"><img src="qr-instagram.png" alt="Instagram QR code"></div>
+        <div class="cap">Instagram</div>
+      </div>
+      <div class="qr">
+        <div class="box" style="border-style:solid"><img src="qr-slides.png" alt="Slides QR code"></div>
+        <div class="cap">Slides</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  (function () {
+    var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+    var progress = document.getElementById("progress");
+    var counter = document.getElementById("counter");
+    var notesOverlay = document.getElementById("notes-overlay");
+    var notesBody = document.getElementById("notes-body");
+    var current = 0;
+    var notesOn = false;
+
+    function clamp(n) { return Math.max(0, Math.min(slides.length - 1, n)); }
+
+    function render() {
+      slides.forEach(function (s, i) { s.classList.toggle("active", i === current); });
+      progress.style.width = ((current + 1) / slides.length * 100) + "%";
+      counter.textContent = (current + 1) + " / " + slides.length;
+      location.hash = current + 1;
+      var note = slides[current].querySelector("aside.notes");
+      notesBody.textContent = note ? note.textContent : "(no notes for this slide)";
+      notesOverlay.style.display = notesOn ? "block" : "none";
+    }
+
+    function go(n) { current = clamp(n); render(); }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { go(current + 1); e.preventDefault(); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") { go(current - 1); e.preventDefault(); }
+      else if (e.key === "Home") go(0);
+      else if (e.key === "End") go(slides.length - 1);
+      else if (e.key === "n" || e.key === "N") { notesOn = !notesOn; render(); }
+      else if (e.key === "f" || e.key === "F") {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen();
+      }
+    });
+
+    document.addEventListener("click", function (e) {
+      if (notesOverlay.contains(e.target)) return;
+      go(e.clientX > window.innerWidth / 2 ? current + 1 : current - 1);
+    });
+
+    var fromHash = parseInt(location.hash.replace("#", ""), 10);
+    if (!isNaN(fromHash)) current = clamp(fromHash - 1);
+    render();
+  })();
+</script>
+
+</body>
+</html>
