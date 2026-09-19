@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stop Paying for Instructions Your Agent Doesn't Need</title>
+<!--
+  ============================================================
+  HOW TO USE THIS TEMPLATE
+  ============================================================
+  - Each slide is one <section class="slide"> inside <main>.
+    Add, remove, or reorder sections; numbering, progress bar,
+    and hash links adjust themselves.
+  - Present: open in any browser, press F for fullscreen.
+  - Navigate: arrow keys, Space, PageUp/PageDown, Home/End.
+    Click right half = next, left half = back.
+  - Speaker notes: <aside class="notes"> inside a slide.
+    Press N to show/hide notes for the current slide.
+  - Jump to a slide: add #7 to the URL.
+  - Theming: CSS variables in :root. --accent carries the deck.
+  - Slide types:
+      .slide            pointer slide (heading + points)
+      .slide.center     centered, for statements and titles
+      .slide.demo       the "switch to live demo" marker
+      .slide.backup     extra slides after thanks, for Q&A
+  ============================================================
+-->
+<style>
+  :root {
+    --bg: #0e1116;
+    --surface: #161b22;
+    --ink: #e8edf2;
+    --muted: #8b98a5;
+    --accent: #4fd1b5;
+    --warn: #e3b341;
+    --rule: #2a323c;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); overflow: hidden; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: none; flex-direction: column;
+    justify-content: flex-start;
+    padding: 7vh 8vw; gap: 3.2vh;
+  }
+  .slide.active { display: flex; }
+  .slide.center { justify-content: center; }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: clamp(12px, 1.4vw, 16px);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+  h1 {
+    font-size: clamp(34px, 6.2vw, 84px);
+    line-height: 1.05; letter-spacing: -0.02em;
+    font-weight: 750; text-wrap: balance;
+  }
+  h2 {
+    font-size: clamp(26px, 4.4vw, 56px);
+    line-height: 1.1; letter-spacing: -0.015em;
+    font-weight: 700; text-wrap: balance;
+  }
+  .sub {
+    font-size: clamp(16px, 2vw, 26px);
+    color: var(--muted); max-width: 32em; line-height: 1.45;
+  }
+
+  ul.points { list-style: none; display: flex; flex-direction: column; gap: 2.4vh; }
+  ul.points li {
+    font-size: clamp(17px, 2.3vw, 30px);
+    line-height: 1.4; padding-left: 1.15em;
+    position: relative; max-width: 30em;
+  }
+  ul.points li::before {
+    content: "";
+    position: absolute; left: 0; top: 0.55em;
+    width: 0.45em; height: 0.45em; border-radius: 2px;
+    background: var(--accent);
+  }
+  ul.points li strong { color: var(--accent); font-weight: 650; }
+  ul.points li .dim { color: var(--muted); }
+  ul.points li.hl { border-left: 3px solid var(--accent); padding-left: 0.9em; margin-left: -1.2vw; }
+  ul.points li.hl::before { display: none; }
+
+  code {
+    font-family: var(--mono); font-size: 0.85em;
+    background: var(--surface); border: 1px solid var(--rule);
+    border-radius: 6px; padding: 0.08em 0.35em;
+  }
+
+  .statement {
+    font-size: clamp(28px, 4.8vw, 62px);
+    line-height: 1.15; font-weight: 700;
+    letter-spacing: -0.015em; max-width: 18em; text-wrap: balance;
+  }
+  .statement em { font-style: normal; color: var(--accent); }
+
+  .slide.demo { justify-content: center; align-items: flex-start; }
+  .demo-badge {
+    font-family: var(--mono);
+    font-size: clamp(12px, 1.4vw, 16px);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--bg); background: var(--warn);
+    border-radius: 999px; padding: 0.5em 1.2em; font-weight: 700;
+  }
+
+  /* thanks slide QR row */
+  /* stat row */
+  .stats { display: flex; gap: 2.5vw; flex-wrap: wrap; margin-top: 1vh; }
+  .stat { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 3vh 2.2vw; min-width: 200px; flex: 1; }
+  .stat .fig { font-size: clamp(34px, 4.6vw, 64px); font-weight: 750; color: var(--accent); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .stat .cap { color: var(--muted); font-size: clamp(13px, 1.5vw, 18px); margin-top: 1vh; line-height: 1.4; }
+
+  /* code blocks: diff-style, every line stays readable */
+  .code {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 12px;
+    padding: 1.6vh 1.6vw 1.8vh; font-family: var(--mono); font-size: clamp(11.5px, 1.45vw, 17px);
+    line-height: 1.5; margin-top: 0.5vh; display: flex; flex-direction: column; gap: 0.9vh;
+  }
+  .code .file { display: flex; justify-content: space-between; gap: 2vw; color: var(--muted); font-size: 0.78em; letter-spacing: 0.08em; text-transform: uppercase; }
+  .code .file + .file, .code .ln + .file { margin-top: 0.9vh; }
+  .code .lgd { text-transform: none; letter-spacing: 0; }
+  .code .lgd b { color: var(--warn); font-weight: 700; }
+  .code .lgd i { color: var(--accent); font-style: normal; font-weight: 700; }
+  .code .ln { display: flex; justify-content: space-between; align-items: baseline; gap: 2vw; }
+  .code .ln .t { white-space: pre-wrap; }
+  .code .ln .t::before { display: inline-block; width: 1.4em; font-weight: 700; }
+  .code .ln.cut .t { color: var(--muted); }
+  .code .ln.cut .t::before { content: "−"; color: var(--warn); }
+  .code .ln.keep .t { color: var(--accent); }
+  .code .ln.keep .t::before { content: "✓"; color: var(--accent); }
+  .code .ln.plain .t { color: var(--ink); }
+  .code .ln.plain .t::before { content: ""; }
+  .code .why { color: var(--warn); font-size: 0.82em; white-space: nowrap; text-align: right; flex-shrink: 0; }
+  .code .ln.keep .why { color: var(--accent); }
+  .slide .code + .sub, .slide .code + ul.points, .slide ul.points + .code { margin-top: 1vh; }
+
+  /* about-me with photo */
+  .about { display: flex; gap: 4vw; align-items: center; }
+  .about ul.points { flex: 1; }
+  .about.solo { min-height: 58vh; }
+  .about img { height: 58vh; max-width: 34vw; object-fit: cover; border-radius: 18px; border: 1px solid var(--rule); flex-shrink: 0; }
+  /* compact stat tiles when paired with a table */
+  .stats.compact .stat { padding: 1.6vh 1.6vw; min-width: 160px; }
+  .stats.compact .stat .fig { font-size: clamp(24px, 3.2vw, 44px); }
+  .stats.compact .stat .cap { font-size: clamp(11px, 1.2vw, 15px); margin-top: 0.4vh; }
+  .tbl.small { font-size: clamp(12px, 1.35vw, 17px); }
+  .tbl.small th, .tbl.small td { padding: 0.9vh 1.2vw; }
+  /* checkup slide with QR on the right */
+  .withqr { display: flex; gap: 3vw; align-items: flex-start; }
+  .withqr ul.points { flex: 1; }
+  .withqr .qr { flex-shrink: 0; }
+
+  .qr-row { display: flex; gap: 4vw; margin-top: 2vh; flex-wrap: wrap; }
+  .qr {
+    display: flex; flex-direction: column; align-items: center; gap: 1.4vh;
+  }
+  .qr .box {
+    width: clamp(120px, 16vw, 220px); height: clamp(120px, 16vw, 220px);
+    background: var(--surface); border: 2px dashed var(--rule);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-family: var(--mono); font-size: 13px;
+    text-align: center; padding: 12px;
+  }
+  .qr .box img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+  .qr .cap { font-size: clamp(13px, 1.5vw, 18px); color: var(--muted); }
+
+  /* backup tables */
+  .tbl { width: 100%; border-collapse: collapse; font-size: clamp(13px, 1.6vw, 20px); }
+  .tbl th {
+    font-family: var(--mono); font-size: 0.72em;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--muted); text-align: left;
+    padding: 1.2vh 1.2vw; border-bottom: 2px solid var(--rule);
+  }
+  .tbl td { padding: 1.4vh 1.2vw; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.4; }
+  .tbl td:first-child { color: var(--muted); white-space: nowrap; }
+  .tbl .yes { color: var(--accent); }
+  .tbl .no { color: var(--muted); }
+  .backup-tag {
+    font-family: var(--mono);
+    font-size: clamp(11px, 1.2vw, 14px);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--warn);
+  }
+
+  /* chrome */
+  #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); transition: width 0.25s ease; z-index: 10; }
+  #counter { position: fixed; bottom: 16px; right: 20px; font-family: var(--mono); font-size: 13px; color: var(--muted); z-index: 10; }
+  #brand { position: fixed; bottom: 16px; left: 20px; font-family: var(--mono); font-size: 13px; color: var(--muted); z-index: 10; }
+
+  aside.notes { display: none; }
+  #notes-overlay {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: rgba(10, 13, 17, 0.96);
+    border-top: 2px solid var(--accent);
+    padding: 18px 32px 26px;
+    font-size: 16px; line-height: 1.55; color: var(--ink);
+    display: none; z-index: 20; max-height: 40vh; overflow-y: auto;
+  }
+  #notes-overlay .tag {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); display: block; margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="brand">Stop Paying for Instructions</div>
+<div id="counter"></div>
+<div id="notes-overlay"><span class="tag">Speaker notes (N to hide)</span><div id="notes-body"></div></div>
+
+<main>
+
+  <!-- 1 · TITLE -->
+  <section class="slide center">
+    <div class="kicker">React.js Bangalore Meetup</div>
+    <h1>Stop Paying for Instructions Your Agent Doesn't Need</h1>
+    <p class="sub">Keeping your CLAUDE.md lean, and why it just got easier</p>
+  </section>
+
+  <!-- 2 · ABOUT ME (no photo) -->
+  <section class="slide">
+    <div class="kicker">About me</div>
+    <h2>Hi, I'm Jayasurya</h2>
+    <div class="about solo">
+      <ul class="points">
+        <li>Frontend Engineer at <strong>SupplyHouse.com</strong></li>
+        <li>Leading FE for the <strong>Checkout pod</strong></li>
+        <li>Off the clock: <strong>PlayStation</strong> games</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 2b · ABOUT ME (with the puppy) -->
+  <section class="slide">
+    <div class="kicker">About me</div>
+    <h2>Hi, I'm Jayasurya</h2>
+    <div class="about">
+      <ul class="points">
+        <li>Frontend Engineer at <strong>SupplyHouse.com</strong></li>
+        <li>Leading FE for the <strong>Checkout pod</strong></li>
+        <li>Off the clock: <strong>PlayStation</strong> games</li>
+        <li>And when there's no AI around, <strong>she</strong> keeps me busy</li>
+      </ul>
+      <img src="puppy.jpg" alt="My puppy">
+    </div>
+  </section>
+
+  <!-- 3a · ALWAYS LOADED, STATEMENT -->
+  <section class="slide center">
+    <p class="statement">CLAUDE.md loads <em>before your first word.</em></p>
+  </section>
+
+  <!-- 3 · ALWAYS LOADED -->
+  <section class="slide">
+    <div class="kicker">The file</div>
+    <h2>CLAUDE.md loads before your first word</h2>
+    <ul class="points">
+      <li>Read at the start of <strong>every session</strong>, whatever the task</li>
+      <li>Written once, appended forever, <strong>audited never</strong></li>
+      <li>Ours: <strong>938 lines, about 7,000 tokens</strong>, before I'd typed anything</li>
+      <li>Five parallel agents means you pay it <strong>five times</strong></li>
+    </ul>
+  </section>
+
+  <!-- 4 · WHY IT'S A PROBLEM -->
+  <section class="slide">
+    <div class="kicker">The problem</div>
+    <h2>Two reasons bloat hurts</h2>
+    <ul class="points">
+      <li><strong>Tokens</strong>: every unneeded line is paid for on every task</li>
+      <li><strong>Adherence</strong>: the more lines, the more the model ignores</li>
+      <li class="dim" style="color:var(--muted)">Docs: "Bloated CLAUDE.md files cause Claude to ignore your actual instructions."</li>
+      <li>The file you made longer to make it behave is why it stops behaving</li>
+    </ul>
+  </section>
+
+  <!-- 5 · HOW, STATEMENT -->
+  <section class="slide center">
+    <p class="statement">How to <em>optimise</em> it.</p>
+  </section>
+
+  <!-- 6 · MOVE 1 -->
+  <section class="slide">
+    <div class="kicker">Move 1</div>
+    <h2>Delete what the repo already answers</h2>
+    <div class="code">
+      <span class="file">CLAUDE.md, today <span class="lgd"><b>−</b> remove &nbsp; <i>✓</i> keep</span></span>
+      <div class="ln cut"><span class="t">## Tech Stack: React 18, TypeScript 5, Redux, Vite</span><span class="why"># already in package.json</span></div>
+      <div class="ln cut"><span class="t">## Project Structure: app/components, app/containers, app/services</span><span class="why"># one ls away</span></div>
+      <div class="ln cut"><span class="t">## Imports: import Box from '../Box'</span><span class="why"># visible in any file</span></div>
+      <div class="ln cut"><span class="t">Keep components small and focused.</span><span class="why"># generic advice</span></div>
+      <div class="ln keep"><span class="t">components/ never hold Redux state; containers/ own it</span><span class="why"># a real contract, unguessable</span></div>
+      <div class="ln keep"><span class="t">Scaffold with npm run generate, don't hand-write boilerplate</span><span class="why"># a local command</span></div>
+    </div>
+  </section>
+
+  <!-- 7 · MOVE 2 -->
+  <section class="slide">
+    <div class="kicker">Move 2</div>
+    <h2>Split the rules, load them by path</h2>
+    <ul class="points">
+      <li>Styling, containers, tests: <strong>they don't all matter on every task</strong></li>
+      <li>Each becomes its own file under <code>.claude/rules/</code>, tagged with the paths it applies to</li>
+      <li>Touch a test, the testing rules load. Touch a service, they don't.</li>
+    </ul>
+    <div class="code">
+      <span class="file">Working on… <span class="lgd">→ which rule loads</span></span>
+      <div class="ln plain"><span class="t">A container or Redux slice</span><span class="why">.claude/rules/containers.md</span></div>
+      <div class="ln plain"><span class="t">Styling, theme, Box / Flex</span><span class="why">.claude/rules/styling.md</span></div>
+      <div class="ln plain"><span class="t">Writing tests</span><span class="why">.claude/rules/testing.md</span></div>
+      <span class="file">inside testing.md</span>
+      <div class="ln keep"><span class="t">paths: ["**/*.test.tsx"]</span><span class="why"># loads only for test files</span></div>
+      <div class="ln keep"><span class="t">Query by role, not by test id: screen.getByRole('button')</span><span class="why"># one testing rule</span></div>
+    </div>
+  </section>
+
+  <!-- 8 · MOVE 3 -->
+  <section class="slide">
+    <div class="kicker">Move 3</div>
+    <h2>Point, don't paste</h2>
+    <div class="code">
+      <span class="file">CLAUDE.md <span class="lgd"><b>−</b> remove &nbsp; <i>✓</i> keep</span></span>
+      <div class="ln cut"><span class="t">## Redux pattern: 265 lines of reducer, saga, and selector code</span><span class="why"># copied from a real folder</span></div>
+      <div class="ln keep"><span class="t">Redux pattern: see app/containers/OrderHistory</span><span class="why"># a pointer can't go stale</span></div>
+      <div class="ln cut"><span class="t">## Custom hooks: useCart, useAuth, useDebounce, useToggle ...</span><span class="why"># listed 10, the repo has 40</span></div>
+      <div class="ln keep"><span class="t">Hooks live in app/utils/use*.ts, read them there</span><span class="why"># the real list, always current</span></div>
+      <div class="ln cut"><span class="t">## Styling (the same rules again, already in section 4)</span><span class="why"># duplicate: one rule, one home</span></div>
+    </div>
+    <p class="sub">A pointer can't go stale. A copy always does.</p>
+  </section>
+
+  <!-- 9 · MOVE 4 -->
+  <section class="slide">
+    <div class="kicker">Move 4</div>
+    <h2>Must never slip? Not prose.</h2>
+    <div class="code">
+      <span class="file">CLAUDE.md <span class="lgd"><b>−</b> remove &nbsp; <i>✓</i> keep</span></span>
+      <div class="ln cut"><span class="t">Never read .env files.</span><span class="why"># a permission, not a sentence</span></div>
+      <div class="ln cut"><span class="t">Never leave console.log in committed code.</span><span class="why"># a lint rule, not a sentence</span></div>
+      <span class="file">.claude/settings.json</span>
+      <div class="ln keep"><span class="t">"permissions": { "deny": ["Read(./.env)"] }</span><span class="why"># the agent can't read it, ever</span></div>
+      <span class="file">.eslintrc</span>
+      <div class="ln keep"><span class="t">"no-console": "error"</span><span class="why"># the build fails, every time</span></div>
+    </div>
+    <p class="sub">Prose gets skimmed. Automation runs every time and costs zero tokens.</p>
+  </section>
+
+  <!-- 10 · WHAT I DID -->
+  <section class="slide">
+    <div class="kicker">What I did</div>
+    <h2>The numbers</h2>
+    <div class="stats compact">
+      <div class="stat"><div class="fig">938 → 92</div><div class="cap">lines always loaded, plus seven path-scoped rulebooks</div></div>
+      <div class="stat"><div class="fig">−87%</div><div class="cap">instruction tokens on a task in an unrelated file</div></div>
+      <div class="stat"><div class="fig">−36%</div><div class="cap">worst case, every rule firing at once</div></div>
+    </div>
+    <table class="tbl small">
+      <thead><tr><th>Scenario</th><th>Before</th><th>After</th><th>Saving</th></tr></thead>
+      <tbody>
+        <tr><td>Touch an unrelated file (config, JSON)</td><td>~7,039 tokens</td><td>~943</td><td class="yes"><strong>87%</strong></td></tr>
+        <tr><td>Edit a service file</td><td>~7,039</td><td>~1,275</td><td class="yes"><strong>82%</strong></td></tr>
+        <tr><td>Write a test</td><td>~7,039</td><td>~2,063</td><td class="yes"><strong>71%</strong></td></tr>
+        <tr><td>Worst case, everything fires at once</td><td>~7,039</td><td>~4,479</td><td class="yes"><strong>36%</strong></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 11 · DID IT HOLD -->
+  <section class="slide">
+    <div class="kicker">Did quality hold?</div>
+    <h2>We checked before trusting it</h2>
+    <ul class="points">
+      <li>Same real feature, built <strong>ten times</strong>: five old setup, five new</li>
+      <li>Sandboxed: git history stripped, pass criteria written first</li>
+      <li><strong>10 / 10</strong> complete, compiling, tests green</li>
+      <li class="dim" style="color:var(--muted)">One task, ten runs. Directional, not a study. Claim: same quality, lower cost.</li>
+    </ul>
+  </section>
+
+  <!-- 12 · EASY WAY, STATEMENT -->
+  <section class="slide center">
+    <p class="statement">You don't have to do <em>everything</em> I did.</p>
+  </section>
+
+  <!-- 13 · THE TWO COMMANDS -->
+  <section class="slide">
+    <div class="kicker">The easy way</div>
+    <h2>Two commands do most of this now</h2>
+    <ul class="points">
+      <li><code>/doctor</code> inside a session <span class="dim">(2.1.206+)</span>: flags what the <strong>repo already says</strong></li>
+      <li><code>/prompt-audit</code> <span class="dim">(2.1.221+)</span>: flags what the <strong>model no longer needs telling</strong></li>
+      <li>Both propose the change. You read the diff, then accept</li>
+      <li>Reading that diff <strong>is</strong> your eval, for a file this size</li>
+    </ul>
+  </section>
+
+  <!-- 15 · WHY, STATEMENT -->
+  <section class="slide center">
+    <p class="statement">Why are we <em>suddenly</em> talking about this?</p>
+  </section>
+
+  <!-- 16 · WHY NOW -->
+  <section class="slide">
+    <div class="kicker">Why now</div>
+    <h2>The models changed. Our files didn't.</h2>
+    <ul class="points">
+      <li>Older models needed rules, guardrails, step-by-step babysitting</li>
+      <li>Those lines are now <strong>dead weight</strong> for the models we actually run</li>
+      <li>Worse than dead weight: old instructions <strong>confuse</strong> the model, or <strong>hold it back</strong> from what it would do on its own</li>
+      <li>Boris Cherny, roughly: <span class="dim">"every six months, delete your CLAUDE.md and see what the model does"</span></li>
+    </ul>
+  </section>
+
+  <!-- 17 · TAKEAWAYS -->
+  <section class="slide">
+    <div class="kicker">Do this tomorrow</div>
+    <h2>The ten-minute checkup</h2>
+    <div class="withqr">
+      <ul class="points">
+        <li><code>/context</code> in a fresh session: see what you pay before typing</li>
+        <li><code>/doctor</code>, then <code>/prompt-audit</code>: read the diffs, accept</li>
+        <li>Deep, folder-specific rules → <code>.claude/rules/</code> with <code>paths:</code></li>
+        <li>Must-never-slip rules → permissions, hooks, or lint</li>
+        <li class="dim" style="color:var(--muted)">Go deeper: Anthropic, "The New Rules of Context Engineering for Claude 5 Generation Models"</li>
+      </ul>
+      <div class="qr">
+        <div class="box" style="border-style:solid"><img src="qr-blog.png" alt="Anthropic context engineering blog QR code"></div>
+        <div class="cap">Anthropic's blog post</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 · THANKS -->
+  <section class="slide center">
+    <div class="kicker">Thanks</div>
+    <h1 style="font-size:clamp(30px,5vw,64px)">Delete something today.</h1>
+    <div class="qr-row">
+      <div class="qr">
+        <div class="box" style="border-style:solid"><img src="qr-linkedin.png" alt="LinkedIn QR code"></div>
+        <div class="cap">Connect: LinkedIn</div>
+      </div>
+      <div class="qr">
+        <div class="box" style="border-style:solid"><img src="qr-instagram.png" alt="Instagram QR code"></div>
+        <div class="cap">Instagram</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  (function () {
+    var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+    var progress = document.getElementById("progress");
+    var counter = document.getElementById("counter");
+    var notesOverlay = document.getElementById("notes-overlay");
+    var notesBody = document.getElementById("notes-body");
+    var current = 0;
+    var notesOn = false;
+
+    function clamp(n) { return Math.max(0, Math.min(slides.length - 1, n)); }
+
+    function render() {
+      slides.forEach(function (s, i) { s.classList.toggle("active", i === current); });
+      progress.style.width = ((current + 1) / slides.length * 100) + "%";
+      counter.textContent = (current + 1) + " / " + slides.length;
+      location.hash = current + 1;
+      var note = slides[current].querySelector("aside.notes");
+      notesBody.textContent = note ? note.textContent : "(no notes for this slide)";
+      notesOverlay.style.display = notesOn ? "block" : "none";
+    }
+
+    function go(n) { current = clamp(n); render(); }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { go(current + 1); e.preventDefault(); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") { go(current - 1); e.preventDefault(); }
+      else if (e.key === "Home") go(0);
+      else if (e.key === "End") go(slides.length - 1);
+      else if (e.key === "n" || e.key === "N") { notesOn = !notesOn; render(); }
+      else if (e.key === "f" || e.key === "F") {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen();
+      }
+    });
+
+    document.addEventListener("click", function (e) {
+      if (notesOverlay.contains(e.target)) return;
+      go(e.clientX > window.innerWidth / 2 ? current + 1 : current - 1);
+    });
+
+    var fromHash = parseInt(location.hash.replace("#", ""), 10);
+    if (!isNaN(fromHash)) current = clamp(fromHash - 1);
+    render();
+  })();
+</script>
+
+</body>
+</html>
