@@ -158,6 +158,13 @@
   .withqr ul.points { flex: 1; }
   .withqr .qr { flex-shrink: 0; }
 
+  /* plain links for the shareable version */
+  a.lnk { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+  a.lnk:hover, a.lnk:focus-visible { border-bottom-color: var(--accent); }
+  .links { display: flex; flex-direction: column; gap: 1.6vh; margin-top: 2vh; font-size: clamp(15px, 1.9vw, 24px); }
+  .links .lbl { color: var(--muted); display: inline-block; min-width: 6.5em; }
+  .links a.lnk { font-family: var(--mono); font-size: 0.9em; word-break: break-all; }
+
   .qr-row { display: flex; gap: 4vw; margin-top: 2vh; flex-wrap: wrap; }
   .qr {
     display: flex; flex-direction: column; align-items: center; gap: 1.4vh;
@@ -239,21 +246,6 @@
         <li>Leading FE for the <strong>Checkout pod</strong></li>
         <li>Off the clock: <strong>PlayStation</strong> games</li>
       </ul>
-    </div>
-  </section>
-
-  <!-- 2b · ABOUT ME (with the puppy) -->
-  <section class="slide">
-    <div class="kicker">About me</div>
-    <h2>Hi, I'm Jayasurya</h2>
-    <div class="about">
-      <ul class="points">
-        <li>Frontend Engineer at <strong>SupplyHouse.com</strong></li>
-        <li>Leading FE for the <strong>Checkout pod</strong></li>
-        <li>Off the clock: <strong>PlayStation</strong> games</li>
-        <li>And when there's no AI around, <strong>she</strong> keeps me busy</li>
-      </ul>
-      <img src="puppy.jpg" alt="My puppy">
     </div>
   </section>
 
@@ -427,34 +419,24 @@
   <section class="slide">
     <div class="kicker">Do this tomorrow</div>
     <h2>The ten-minute checkup</h2>
-    <div class="withqr">
-      <ul class="points">
-        <li><code>/context</code> in a fresh session: see what you pay before typing</li>
-        <li><code>/doctor</code>, then <code>/prompt-audit</code>: read the diffs, accept</li>
-        <li>Deep, folder-specific rules → <code>.claude/rules/</code> with <code>paths:</code></li>
-        <li>Must-never-slip rules → permissions, hooks, or lint</li>
-        <li class="dim" style="color:var(--muted)">Go deeper: Anthropic, "The New Rules of Context Engineering for Claude 5 Generation Models"</li>
-      </ul>
-      <div class="qr">
-        <div class="box" style="border-style:solid"><img src="qr-blog.png" alt="Anthropic context engineering blog QR code"></div>
-        <div class="cap">Anthropic's blog post</div>
-      </div>
-    </div>
+    <ul class="points">
+      <li><code>/context</code> in a fresh session: see what you pay before typing</li>
+      <li><code>/doctor</code>, then <code>/prompt-audit</code>: read the diffs, accept</li>
+      <li>Deep, folder-specific rules → <code>.claude/rules/</code> with <code>paths:</code></li>
+      <li>Must-never-slip rules → permissions, hooks, or lint</li>
+      <li class="dim" style="color:var(--muted)">Go deeper: Anthropic, "The New Rules of Context Engineering for Claude 5 Generation Models"<br><a class="lnk" href="https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models">claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models</a></li>
+    </ul>
   </section>
 
   <!-- 18 · THANKS -->
   <section class="slide center">
     <div class="kicker">Thanks</div>
     <h1 style="font-size:clamp(30px,5vw,64px)">Delete something today.</h1>
-    <div class="qr-row">
-      <div class="qr">
-        <div class="box" style="border-style:solid"><img src="qr-linkedin.png" alt="LinkedIn QR code"></div>
-        <div class="cap">Connect: LinkedIn</div>
-      </div>
-      <div class="qr">
-        <div class="box" style="border-style:solid"><img src="qr-instagram.png" alt="Instagram QR code"></div>
-        <div class="cap">Instagram</div>
-      </div>
+    <div class="links">
+      <div><span class="lbl">LinkedIn</span><a class="lnk" href="https://www.linkedin.com/in/jayasurya-s">linkedin.com/in/jayasurya-s</a></div>
+      <div><span class="lbl">Instagram</span><a class="lnk" href="https://www.instagram.com/techwithjayasurya">instagram.com/techwithjayasurya</a></div>
+      <div><span class="lbl">These slides</span><a class="lnk" href="https://jayasuryas-sh.github.io/reactjs-meetup/talk2/">jayasuryas-sh.github.io/reactjs-meetup/talk2/</a></div>
+      <div><span class="lbl">Talk one</span><a class="lnk" href="https://jayasuryas-sh.github.io/reactjs-meetup/">jayasuryas-sh.github.io/reactjs-meetup/</a></div>
     </div>
   </section>
 
