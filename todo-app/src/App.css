@@ -1,0 +1,101 @@
+.app {
+  width: min(32rem, calc(100% - 2rem));
+  margin: 4rem auto;
+  padding: 1.75rem;
+  background: #fffdf9;
+  border: 1px solid #e7e0d6;
+  border-radius: 12px;
+}
+
+h1 {
+  margin: 0 0 1.25rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.add-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.add-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #d6d0c6;
+  border-radius: 8px;
+  background: #fff;
+  color: inherit;
+}
+
+.add-form input:focus {
+  outline: 2px solid #c4b8a5;
+  outline-offset: 1px;
+}
+
+button {
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #1c1917;
+  border-radius: 8px;
+  background: #1c1917;
+  color: #fffdf9;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #44403c;
+}
+
+.empty,
+.count {
+  margin: 1rem 0 0;
+  color: #78716c;
+  font-size: 0.95rem;
+}
+
+.list {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #efeae3;
+}
+
+.list label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.list span {
+  overflow-wrap: anywhere;
+}
+
+.list li.done span {
+  color: #a8a29e;
+  text-decoration: line-through;
+}
+
+.delete {
+  flex-shrink: 0;
+  padding: 0.3rem 0.55rem;
+  border-color: #e7e0d6;
+  background: transparent;
+  color: #78716c;
+  font-size: 0.85rem;
+}
+
+.delete:hover {
+  background: #f6f3ee;
+  color: #1c1917;
+}
