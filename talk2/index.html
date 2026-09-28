@@ -218,6 +218,50 @@
     letter-spacing: 0.15em; text-transform: uppercase;
     color: var(--accent); display: block; margin-bottom: 8px;
   }
+
+  /* ---- phone / narrow viewports ---- */
+  @media (max-width: 768px) {
+    .slide { padding: 6vh 6vw 9vh; gap: 2.2vh; justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .slide.center { justify-content: center; }
+    h1 { font-size: clamp(30px, 9vw, 44px); }
+    h2 { font-size: clamp(24px, 7vw, 34px); }
+    .statement { font-size: clamp(26px, 7.5vw, 38px); max-width: none; }
+    .sub { font-size: 16px; max-width: none; }
+    .kicker { font-size: 12px; }
+    ul.points { gap: 1.6vh; }
+    ul.points li { font-size: 17px; max-width: none; }
+    ul.points li.hl { margin-left: 0; }
+
+    /* code blocks: stack text and reason */
+    .code { font-size: 12.5px; padding: 12px 14px 14px; gap: 10px; line-height: 1.45; }
+    .code .file { flex-wrap: wrap; gap: 4px 12px; }
+    .code .ln { flex-direction: column; align-items: flex-start; gap: 2px; }
+    .code .why { white-space: normal; text-align: left; padding-left: 1.4em; font-size: 0.85em; }
+
+    /* stat tiles stack, table scrolls sideways */
+    .stats { gap: 10px; }
+    .stat, .stats.compact .stat { min-width: 100%; padding: 12px 14px; }
+    .stat .fig, .stats.compact .stat .fig { font-size: 30px; }
+    .stat .cap, .stats.compact .stat .cap { font-size: 13px; }
+    .tbl, .tbl.small { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 13px; }
+    .tbl th, .tbl td, .tbl.small th, .tbl.small td { padding: 8px 12px; white-space: nowrap; }
+    /* the Before column is the same ~7,039 on every row: drop it on phones so Saving stays in view */
+    .tbl th:nth-child(2), .tbl td:nth-child(2) { display: none; }
+    .tbl td:first-child { white-space: normal; }
+
+    /* about, links, QR rows */
+    .about { flex-direction: column; align-items: flex-start; gap: 3vh; }
+    .about.solo { min-height: 0; }
+    .about img { max-width: 100%; height: auto; max-height: 40vh; }
+    .links { font-size: 16px; gap: 14px; }
+    .links .lbl { display: block; min-width: 0; margin-bottom: 2px; font-size: 13px; }
+    .qr-row { gap: 20px; }
+
+    /* chrome */
+    #brand { display: none; }
+    #counter { bottom: 10px; right: 12px; font-size: 12px; }
+    #notes-overlay { max-height: 55vh; padding: 14px 18px 20px; font-size: 14px; }
+  }
 </style>
 </head>
 <body>
@@ -478,8 +522,23 @@
 
     document.addEventListener("click", function (e) {
       if (notesOverlay.contains(e.target)) return;
+      if (e.target.closest("a")) return;
       go(e.clientX > window.innerWidth / 2 ? current + 1 : current - 1);
     });
+
+    var touchX = null, touchY = null;
+    document.addEventListener("touchstart", function (e) {
+      if (e.touches.length !== 1) return;
+      touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener("touchend", function (e) {
+      if (touchX === null) return;
+      var dx = e.changedTouches[0].clientX - touchX;
+      var dy = e.changedTouches[0].clientY - touchY;
+      touchX = touchY = null;
+      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      go(dx < 0 ? current + 1 : current - 1);
+    }, { passive: true });
 
     var fromHash = parseInt(location.hash.replace("#", ""), 10);
     if (!isNaN(fromHash)) current = clamp(fromHash - 1);
